@@ -1,0 +1,141 @@
+{
+  "apiBase": "https://ddys.io/api/v1",
+  "siteBase": "https://ddys.io",
+  "apiKey": "",
+  "homeLimit": 24,
+  "pageSize": 24,
+  "timeoutMs": 12000,
+  "playMode": "direct-first",
+  "categories": [
+    {
+      "type_id": "latest",
+      "type_name": "最新更新"
+    },
+    {
+      "type_id": "hot",
+      "type_name": "热门内容"
+    },
+    {
+      "type_id": "movie",
+      "type_name": "电影"
+    },
+    {
+      "type_id": "series",
+      "type_name": "剧集"
+    },
+    {
+      "type_id": "anime",
+      "type_name": "动漫"
+    },
+    {
+      "type_id": "variety",
+      "type_name": "综艺"
+    },
+    {
+      "type_id": "documentary",
+      "type_name": "纪录片"
+    }
+  ],
+  "filters": {
+    "movie": [
+      {
+        "key": "sort",
+        "name": "排序",
+        "value": [
+          {
+            "n": "默认",
+            "v": ""
+          },
+          {
+            "n": "最新",
+            "v": "latest"
+          },
+          {
+            "n": "热门",
+            "v": "hot"
+          }
+        ]
+      }
+    ],
+    "series": [
+      {
+        "key": "sort",
+        "name": "排序",
+        "value": [
+          {
+            "n": "默认",
+            "v": ""
+          },
+          {
+            "n": "最新",
+            "v": "latest"
+          },
+          {
+            "n": "热门",
+            "v": "hot"
+          }
+        ]
+      }
+    ],
+    "anime": [
+      {
+        "key": "sort",
+        "name": "排序",
+        "value": [
+          {
+            "n": "默认",
+            "v": ""
+          },
+          {
+            "n": "最新",
+            "v": "latest"
+          },
+          {
+            "n": "热门",
+            "v": "hot"
+          }
+        ]
+      }
+    ],
+    "variety": [
+      {
+        "key": "sort",
+        "name": "排序",
+        "value": [
+          {
+            "n": "默认",
+            "v": ""
+          },
+          {
+            "n": "最新",
+            "v": "latest"
+          },
+          {
+            "n": "热门",
+            "v": "hot"
+          }
+        ]
+      }
+    ],
+    "documentary": [
+      {
+        "key": "sort",
+        "name": "排序",
+        "value": [
+          {
+            "n": "默认",
+            "v": ""
+          },
+          {
+            "n": "最新",
+            "v": "latest"
+          },
+          {
+            "n": "热门",
+            "v": "hot"
+          }
+        ]
+      }
+    ]
+  }
+}

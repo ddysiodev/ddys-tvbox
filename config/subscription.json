@@ -1,0 +1,11 @@
+{
+  "name": "DDYS TVBox",
+  "version": "0.1.0",
+  "items": [
+    {
+      "name": "DDYS 官方 TVBox 配置",
+      "url": "https://raw.githubusercontent.com/ddysiodev/ddys-tvbox/main/tvbox.json",
+      "description": "适用于 TVBox、FongMi、影视仓、OK影视等 CatVod 兼容客户端。"
+    }
+  ]
+}

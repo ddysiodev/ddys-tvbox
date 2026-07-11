@@ -1,0 +1,79 @@
+{
+  "notice": "DDYS TVBox 官方配置。公开读取接口默认不需要 API Key，资源来自你配置的 DDYS API Base。",
+  "sites": [
+    {
+      "key": "ddys",
+      "name": "低端影视",
+      "type": 3,
+      "api": "./spider/ddys.js",
+      "ext": {
+        "apiBase": "https://ddys.io/api/v1",
+        "siteBase": "https://ddys.io",
+        "apiKey": "",
+        "homeLimit": 24,
+        "pageSize": 24,
+        "timeoutMs": 12000,
+        "playMode": "direct-first",
+        "categories": [
+          {
+            "type_id": "latest",
+            "type_name": "最新更新"
+          },
+          {
+            "type_id": "hot",
+            "type_name": "热门内容"
+          },
+          {
+            "type_id": "movie",
+            "type_name": "电影"
+          },
+          {
+            "type_id": "series",
+            "type_name": "剧集"
+          },
+          {
+            "type_id": "anime",
+            "type_name": "动漫"
+          },
+          {
+            "type_id": "variety",
+            "type_name": "综艺"
+          },
+          {
+            "type_id": "documentary",
+            "type_name": "纪录片"
+          }
+        ]
+      },
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "changeable": 1,
+      "timeout": 30,
+      "style": {
+        "type": "rect",
+        "ratio": 0.66
+      }
+    }
+  ],
+  "parses": [],
+  "doh": [
+    {
+      "name": "Cloudflare",
+      "url": "https://cloudflare-dns.com/dns-query",
+      "ips": [
+        "1.1.1.1",
+        "1.0.0.1"
+      ]
+    },
+    {
+      "name": "Google",
+      "url": "https://dns.google/dns-query",
+      "ips": [
+        "8.8.8.8",
+        "8.8.4.4"
+      ]
+    }
+  ],
+  "ads": []
+}

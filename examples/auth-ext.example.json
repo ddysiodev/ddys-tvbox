@@ -1,0 +1,8 @@
+{
+  "apiBase": "https://ddys.io/api/v1",
+  "siteBase": "https://ddys.io",
+  "apiKey": "ddys_your_api_key_here",
+  "homeLimit": 24,
+  "pageSize": 24,
+  "timeoutMs": 12000
+}

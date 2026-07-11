@@ -1,0 +1,20 @@
+{
+  "name": "ddys-tvbox",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "低端影视 API 的官方 TVBox / FongMi / 影视仓 / OK影视配置与 CatVod JS Spider",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "test": "node tools/check.mjs && node --test tests/*.test.mjs",
+    "package": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-package.ps1"
+  },
+  "keywords": [
+    "ddys",
+    "tvbox",
+    "fongmi",
+    "catvod",
+    "spider"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+package/
+*.log
+*.tmp
+*.cache
+*.zip
+.env
+.env.*
+!.env.example
