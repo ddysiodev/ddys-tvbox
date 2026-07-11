@@ -177,7 +177,7 @@ function getLastError() {
 
 function parseExtend(input) {
   if (!input) return {};
-  if (typeof input === 'object') return input;
+  if (typeof input === 'object') return unwrapExtendObject(input);
   const text = String(input).trim();
   if (!text) return {};
   if (text.startsWith('{') || text.startsWith('[')) return JSON.parse(text);
@@ -186,6 +186,17 @@ function parseExtend(input) {
     return response.text ? JSON.parse(response.text) : {};
   }
   return {};
+}
+
+function unwrapExtendObject(input) {
+  if (!input || typeof input !== 'object') return {};
+  if (Object.prototype.hasOwnProperty.call(input, 'ext')) {
+    const ext = input.ext;
+    if (!ext) return {};
+    if (typeof ext === 'object') return ext;
+    if (typeof ext === 'string') return parseExtend(ext);
+  }
+  return input;
 }
 
 function normalizeConfig(input) {
@@ -235,6 +246,7 @@ function requestText(url, options) {
   const reqFn = globalThis.req || globalThis.request;
   if (typeof reqFn === 'function') return normalizeResponse(reqFn(url, {
     method: 'GET',
+    async: false,
     headers: (options && options.headers) || {},
     timeout: (options && options.timeoutMs) || DEFAULT_CONFIG.timeoutMs
   }));
@@ -243,6 +255,9 @@ function requestText(url, options) {
 
 function normalizeResponse(response) {
   if (typeof response === 'string') return { status: 200, text: response };
+  if (response && typeof response.then === 'function') {
+    throw new Error('Request helper returned a Promise. CatVod spider requests must be synchronous.');
+  }
   if (!response || typeof response !== 'object') return { status: 0, text: '' };
   if (typeof response.content === 'string') return { status: Number(response.status || response.code || 200), text: response.content };
   if (typeof response.body === 'string') return { status: Number(response.status || response.code || 200), text: response.body };

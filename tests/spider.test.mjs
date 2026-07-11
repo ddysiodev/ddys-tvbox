@@ -73,16 +73,22 @@ test('exports CatVod-compatible object', () => {
 
 test('homeContent returns categories and filters', () => {
   spider.init({
+    stype: 3,
+    skey: 'ddys',
+    ext: {
     apiBase: 'https://example.com/api/v1',
     siteBase: 'https://ddys.io',
     apiKey: 'ddys_test_key',
     filters: {
       movie: [{ key: 'sort', name: '排序', value: [{ n: '最新', v: 'latest' }] }]
     }
+    }
   });
   const result = JSON.parse(spider.homeContent(true));
   assert.ok(result.class.some((item) => item.type_id === 'movie'));
   assert.equal(result.filters.movie[0].key, 'sort');
+  assert.equal(spider.getConfig().apiBase, 'https://example.com/api/v1');
+  assert.equal(spider.getConfig().apiKey, 'ddys_test_key');
 });
 
 test('home, category, and search request DDYS API', () => {
@@ -119,4 +125,23 @@ test('detailContent builds resource groups and playerContent decodes play ids', 
   const play = JSON.parse(spider.playerContent('在线播放', firstPlayId, []));
   assert.equal(play.parse, 0);
   assert.equal(play.url, 'https://cdn.example/video.m3u8');
+});
+
+test('uses synchronous request mode for FongMi http helper', () => {
+  spider.setTransport(null);
+  const previous = globalThis.req;
+  const calls = [];
+  globalThis.req = (url, options) => {
+    calls.push({ url, options });
+    return envelope(fixtures.latest);
+  };
+  try {
+    spider.init({ apiBase: 'https://example.com/api/v1', siteBase: 'https://ddys.io' });
+    const home = JSON.parse(spider.homeVideoContent());
+    assert.equal(home.list[0].vod_name, '最新电影');
+    assert.equal(calls[0].options.async, false);
+  } finally {
+    if (previous === undefined) delete globalThis.req;
+    else globalThis.req = previous;
+  }
 });
