@@ -1,0 +1,38 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Check repository
+        run: node tools/check.mjs
+
+      - name: Run tests
+        run: node --test tests/*.test.mjs
+
+      - name: Build package
+        shell: powershell
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version "${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '0.1.1' }}"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ddys-tvbox-v0.1.1
+          path: |
+            releases/ddys-tvbox-v0.1.1.zip
+            releases/ddys-tvbox-v0.1.1.zip.sha256

@@ -112,6 +112,19 @@ test('home, category, and search request DDYS API', () => {
   assert.equal(calls[0].options.headers.Authorization, 'Bearer ddys_test_key');
 });
 
+test('latest, hot, and empty search handle edge cases', () => {
+  const calls = installMock();
+  spider.init({ apiBase: 'https://example.com/api/v1', siteBase: 'https://ddys.io' });
+  const latest = JSON.parse(spider.categoryContent('latest', '1', true, {}));
+  const hot = JSON.parse(spider.categoryContent('hot', '1', true, {}));
+  const beforeEmptySearch = calls.length;
+  const empty = JSON.parse(spider.searchContent('   ', false, '1'));
+  assert.equal(latest.list[0].vod_name, '最新电影');
+  assert.equal(hot.list[0].vod_name, '热门剧集');
+  assert.deepEqual(empty.list, []);
+  assert.equal(calls.length, beforeEmptySearch);
+});
+
 test('detailContent builds resource groups and playerContent decodes play ids', () => {
   installMock();
   spider.init({ apiBase: 'https://example.com/api/v1', siteBase: 'https://ddys.io' });
@@ -125,6 +138,34 @@ test('detailContent builds resource groups and playerContent decodes play ids', 
   const play = JSON.parse(spider.playerContent('在线播放', firstPlayId, []));
   assert.equal(play.parse, 0);
   assert.equal(play.url, 'https://cdn.example/video.m3u8');
+});
+
+test('playerContent accepts raw URLs and preserves headers from encoded payloads', () => {
+  const direct = JSON.parse(spider.playerContent('DDYS', 'https://cdn.example/movie.mp4', []));
+  assert.equal(direct.parse, 0);
+  assert.equal(direct.url, 'https://cdn.example/movie.mp4');
+
+  const payload = encodeURIComponent(JSON.stringify({
+    url: 'https://example.com/protected.m3u8',
+    parse: 0,
+    header: { Referer: 'https://ddys.io/' }
+  }));
+  const withHeader = JSON.parse(spider.playerContent('DDYS', payload, []));
+  assert.equal(withHeader.parse, 0);
+  assert.equal(withHeader.header.Referer, 'https://ddys.io/');
+});
+
+test('detailContent still returns metadata when sources or related fail', () => {
+  spider.setTransport((url) => {
+    const parsed = new URL(url);
+    const path = parsed.pathname.replace('/api/v1', '');
+    if (path === '/movies/movie-one') return envelope(fixtures.detail);
+    return { status: 500, text: JSON.stringify({ success: false, message: 'broken optional endpoint' }) };
+  });
+  spider.init({ apiBase: 'https://example.com/api/v1', siteBase: 'https://ddys.io' });
+  const detail = JSON.parse(spider.detailContent('movie-one'));
+  assert.equal(detail.list[0].vod_name, '分类电影');
+  assert.match(detail.list[0].vod_play_from, /DDYS/);
 });
 
 test('uses synchronous request mode for FongMi http helper', () => {
@@ -144,4 +185,12 @@ test('uses synchronous request mode for FongMi http helper', () => {
     if (previous === undefined) delete globalThis.req;
     else globalThis.req = previous;
   }
+});
+
+test('async request helpers are rejected because CatVod calls are synchronous', () => {
+  spider.setTransport(() => Promise.resolve(envelope(fixtures.latest)));
+  spider.init({ apiBase: 'https://example.com/api/v1' });
+  const home = JSON.parse(spider.homeVideoContent());
+  assert.deepEqual(home.list, []);
+  assert.match(spider.getLastError(), /synchronous/i);
 });

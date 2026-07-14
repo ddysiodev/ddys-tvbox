@@ -1,6 +1,6 @@
 {
   "name": "ddys-tvbox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "低端影视 API 的官方 TVBox / FongMi / 影视仓 / OK影视配置与 CatVod JS Spider",
@@ -16,5 +16,8 @@
     "catvod",
     "spider"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }

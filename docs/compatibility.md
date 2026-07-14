@@ -49,3 +49,9 @@ https://raw.githubusercontent.com/ddysiodev/ddys-tvbox/main/tvbox.json
 - 直链视频、HLS、MP4：Spider 返回 `parse: 0`。
 - 普通网页或网盘链接：Spider 返回 `parse: 1`，由客户端自行处理或嗅探。
 - 下载、磁力、网盘资源：会出现在详情页内容和线路列表中，但实际能否打开取决于客户端播放器。
+
+## Release 打包
+
+- Release ZIP 使用固定排序、固定 ZIP 时间戳和 STORE 模式，避免不同机器生成不同资产。
+- `.sha256` 使用稳定 ASCII 内容，无尾随换行。
+- `.gitattributes` 固定文本文件 LF，避免 Windows CI checkout 改写换行导致 ZIP SHA 不一致。

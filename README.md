@@ -1,21 +1,39 @@
 # DDYS TVBox
 
-DDYS TVBox 是低端影视 API 的官方 TVBox / FongMi / 影视仓 / OK影视配置包，包含可直接导入的 TVBox 配置 JSON 和 CatVod JS Spider。
+DDYS TVBox 是低端影视 API 的 TVBox / FongMi / 影视仓 / OK影视配置包，包含可直接导入的 `tvbox.json` 和 CatVod JavaScript Spider。
 
 ## 功能
 
 - TVBox 配置 JSON：`tvbox.json`
 - CatVod JS Spider：`spider/ddys.js`
-- FongMi / 影视仓 / OK影视兼容说明
+- FongMi / 影视仓 / OK影视 / TVBox 分支兼容说明
 - 首页推荐：最新更新
 - 分类入口：最新、热门、电影、剧集、动漫、综艺、纪录片
-- 分类筛选：支持按排序参数透传给 DDYS API
+- 分类筛选：支持把排序、地区、年份等参数透传给 DDYS API
 - 搜索：关键词搜索和分页
 - 详情页：影片信息、资源列表、相关内容
 - 播放线路：在线播放、下载资源、网盘资源、其他资源分组
 - API Base 可配置：官方 API 或自建 Worker Proxy
-- API Key 可选：公开读取接口默认不需要
-- 本地自检、单测、Release ZIP
+- API Key 可选：公开读取接口默认不需要；需要时会附加 `Authorization: Bearer <apiKey>`
+- 本地自检、单测、CI、确定性 Release ZIP 和 `.sha256`
+
+## Release 资产
+
+GitHub Release 提供两个文件：
+
+```text
+ddys-tvbox-v0.1.1.zip
+ddys-tvbox-v0.1.1.zip.sha256
+```
+
+ZIP 包含配置、Spider、示例、文档、测试和打包/自检脚本；不包含 `node_modules`、`coverage`、`dist`、`package`、`releases`、本机环境变量或临时产物。
+
+校验：
+
+```powershell
+Get-FileHash .\ddys-tvbox-v0.1.1.zip -Algorithm SHA256
+Get-Content .\ddys-tvbox-v0.1.1.zip.sha256
+```
 
 ## 使用
 
@@ -78,10 +96,13 @@ ddys-tvbox/
 
 ## 本地检查
 
-```bash
+```text
 node tools/check.mjs
 node --test tests/*.test.mjs
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-package.ps1
 ```
+
+打包脚本会生成确定性 ZIP 和稳定的 ASCII `.sha256` 文件。
 
 ## License
 

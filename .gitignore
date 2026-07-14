@@ -1,10 +1,13 @@
 node_modules/
+dist/
+releases/
 coverage/
 package/
 *.log
 *.tmp
 *.cache
 *.zip
+*.sha256
 .env
 .env.*
 !.env.example
